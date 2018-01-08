@@ -1,0 +1,37 @@
+---
+TestItems:
+  Default:
+    version:
+      match: "version (12\\.2)"
+      expected: "12.2"
+    sshVersion2:
+      match: "ip ssh version ([0-9])"
+      expected: "2"
+    if-mode-access:
+      type: "config"
+      match: ["interface GigabitEthernet1/0/[1-9]$","switchport mode (access)"]
+      expected: access
+
+  Catalyst3750:
+    vlanInternalAllocationPolicyAscending:
+      match: "vlan internal allocation policy (descending|ascending)"
+      expected: "ascending"
+    if-uplinks-shutdown:
+      type: "config"
+      match: ["interface GigabitEthernet1/0/2[78]","(shutdown)"]
+      expected: shutdown
+    if-description:
+      type: "config"
+      match: ["interface GigabitEthernet1/0/[1-9]$","description (Allstar).*"]
+      expected: Allstar
+
+TestGroups:
+  Basic:
+    - version
+    - sshVersion2
+    - vlanInternalAllocationPolicyAscending
+
+  Advanced:
+    - if-mode-access
+    - if-uplinks-shutdown
+    - if-description

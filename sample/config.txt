@@ -1,0 +1,141 @@
+!
+version 12.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname CatTest1
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 abcdefghijklmnopqrstuvwxyz123/
+enable password 123456
+!
+username admin password 0 123456
+!
+!
+no aaa new-model
+switch 1 provision ws-c3750g-24ts
+system mtu routing 1500
+authentication mac-move permit
+ip subnet-zero
+ip domain-name net.local
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree etherchannel guard misconfig
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+ip ssh version 2
+!
+!
+interface GigabitEthernet1/0/1
+  switchport mode access
+  description Allstar1!
+!
+interface GigabitEthernet1/0/2
+  switchport mode access
+  description Allstar2!
+!         
+interface GigabitEthernet1/0/3
+  switchport mode access
+  description Allstar3!
+!
+interface GigabitEthernet1/0/4
+  switchport mode access
+  description Allstar4!
+!
+interface GigabitEthernet1/0/5
+  switchport mode access
+  description Allstar5!
+!
+interface GigabitEthernet1/0/6
+  switchport mode access
+  description Allstar6!
+!
+interface GigabitEthernet1/0/7
+  switchport mode access
+  description Allstar7!
+!
+interface GigabitEthernet1/0/8
+  switchport mode access
+  description Allstar8!
+!
+interface GigabitEthernet1/0/9
+  switchport mode access
+  description Allstar9!
+!
+interface GigabitEthernet1/0/10
+!
+interface GigabitEthernet1/0/11
+!
+interface GigabitEthernet1/0/12
+!
+interface GigabitEthernet1/0/13
+!
+interface GigabitEthernet1/0/14
+!
+interface GigabitEthernet1/0/15
+!
+interface GigabitEthernet1/0/16
+!
+interface GigabitEthernet1/0/17
+!
+interface GigabitEthernet1/0/18
+!
+interface GigabitEthernet1/0/19
+!
+interface GigabitEthernet1/0/20
+!
+interface GigabitEthernet1/0/21
+!
+interface GigabitEthernet1/0/22
+!
+interface GigabitEthernet1/0/23
+!
+interface GigabitEthernet1/0/24
+!
+interface GigabitEthernet1/0/25
+!         
+interface GigabitEthernet1/0/26
+!
+interface GigabitEthernet1/0/27
+ description noaccess
+ shutdown
+!
+interface GigabitEthernet1/0/28
+ description noaccess
+ shutdown
+!
+interface Vlan1
+ ip address 192.168.0.221 255.255.255.0
+!
+ip classless
+ip http server
+ip http secure-server
+!
+ip sla enable reaction-alerts
+snmp-server community public RO
+!
+!
+line con 0
+line vty 0 4
+ password 123456
+ login local
+ transport input ssh
+line vty 5 15
+ password 123456
+ login
+!
+end
+
