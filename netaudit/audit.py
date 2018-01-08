@@ -119,10 +119,12 @@ class TestFile(object):
 
     :version: string version text'''
     if isinstance(version, str):
-      self._config_version = version
+      self._config_version = [version]
+    elif isinstance(version, collections.Iterable):
+      self._config_version = tuple(version)
     else:
-      msg = ('"%s" is not a valid string.  Set config_version to a string.'
-             % str(version))
+      msg = ('"%s" is not a valid string or list.  Set config_version to a '
+             'string or list of strings.' % str(version))
       raise ValueError(msg)
 
   def find_test_by_name(self, test_name):
@@ -134,22 +136,27 @@ class TestFile(object):
     :test_name: string test name as defined in test definition file
     '''
     test = None
-    for test_version, test_definition in self.test_definitions:
-      if (test_version == DEFAULT_CONF and test is None and test_name in
-          test_definition):
-        test = test_definition[test_name]
-      elif(test_version in self.config_version and test_name in
-           test_definition):
-        test = test_definition[test_name]
-    if test is not None:
-      test_case = TestCase(
-        test_name=test_name,
-        command=test['cmd'] if 'cmd' in test else None,
-        pattern=test['match'],
-        expected=test['expected'],
-        test_type=test['type'] if 'type' in test else None,
-      )
-      return test_case
+    test_definitions = self.test_definitions
+
+    
+    for config_version in reversed([DEFAULT_CONF] + list(self.config_version)):
+      test_definition_match = None
+      for test_definition in test_definitions:
+        if test_definition[0] == config_version:
+          test_definition_match = test_definition
+      if test_definition_match is None:
+        msg = ('Make sure the test item exists and has the specified '
+           'test (%s).' % (config_version))
+        raise E.TestItemNotFoundError(msg)
+      if test_name in test_definition_match[1]:
+        test = test_definition_match[1][test_name]
+        return TestCase(
+          test_name=test_name,
+          command=test['cmd'] if 'cmd' in test else None,
+          pattern=test['match'],
+          expected=test['expected'],
+          test_type=test['type'] if 'type' in test else None,
+        )
     msg = ('Make sure the test configuration exists and has the specified '
            'test (%s).' % (test_name))
     raise E.TestNotFoundError(msg)

@@ -13,6 +13,13 @@ class TestNotFoundError(Exception):
 
 
 
+class TestItemNotFoundError(Exception):
+  '''TestItem was not found in test definition configuration'''
+  pass
+
+
+
+
 class TestGroupDoesNotExistError(Exception):
   '''Test group was not found in test definition configuration'''
   pass

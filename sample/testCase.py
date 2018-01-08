@@ -1,19 +1,19 @@
 import netaudit.audit
 import netaudit.config
-import netaudit.tests
 
-confFile = '/repos/netaudit/sample/catalyst3750_1.txt'
-testTemplate = '/repos/netaudit/configs/tests.yaml'
+confFile = '/media/sf_repos/netaudit/sample/catalyst3750_1.txt'
+testTemplate = '/media/sf_repos/netaudit/sample/tests.yaml'
 
 conf = netaudit.config.ConfigFile(confFile)
-tests = netaudit.tests.TestFile()
+tests = netaudit.audit.TestFile()
 tests.load(testTemplate)
+tests.config_version = ['Cisco', 'Catalyst3750']
 testName = 'Basic'
 
 auditor = netaudit.audit.AuditTests(config=conf, tests=tests,
-                                    testGroup=testName)
+                                    test_group=testName)
 auditor.run()
-print(auditor.lastResults[0].result)
+print(auditor.last_results[0].result)
 
-for test in auditor.lastResults:
+for test in auditor.last_results:
     print('Test: %s  Result: %s' % (test.name, test.result))

@@ -12,10 +12,12 @@ TestItems:
       match: ["interface GigabitEthernet1/0/[1-9]$","switchport mode (access)"]
       expected: access
 
-  Catalyst3750:
+  Cisco:
     vlanInternalAllocationPolicyAscending:
       match: "vlan internal allocation policy (descending|ascending)"
       expected: "ascending"
+
+  Catalyst3750:
     if-uplinks-shutdown:
       type: "config"
       match: ["interface GigabitEthernet1/0/2[78]","(shutdown)"]
@@ -24,6 +26,11 @@ TestItems:
       type: "config"
       match: ["interface GigabitEthernet1/0/[1-9]$","description (Allstar).*"]
       expected: Allstar
+
+  Catalyst3750.24:
+    CustomTest:
+      match: "acme (vers\\. 2)"
+      expected: "vers\\. 2"
 
 TestGroups:
   Basic:

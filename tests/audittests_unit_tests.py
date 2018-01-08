@@ -68,15 +68,21 @@ class TestFileTests(unittest.TestCase):
     test_file.from_string(C.SAMPLE_TEST_FILE)
     self.assertGreater(len(test_file.test_definitions), 0)
 
-  def test_config_version_raiseserror_if_not_str(self):
+  def test_config_version_raiseserror_if_not_list_or_str(self):
     test_file = audit.TestFile()
     self.assertRaises(ValueError, setattr, test_file, 'config_version', 2)
 
-  def test_config_version_sets_str(self):
-    version = 'MyVersion'
+  def test_config_version_str_sets_tuple(self):
+    version = ['MyVersion']
+    test_file = audit.TestFile()
+    test_file.config_version = version[0]
+    self.assertEquals(test_file.config_version, version)
+
+  def test_config_version_list_sets_tuple(self):
+    version = ['MyVersion', 'MyVersion2']
     test_file = audit.TestFile()
     test_file.config_version = version
-    self.assertEquals(test_file.config_version, version)
+    self.assertEquals(test_file.config_version, tuple(version))
 
   def test_find_test_by_name_gets_testcase_object(self):
     test_file = audit.TestFile()
