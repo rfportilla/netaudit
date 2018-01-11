@@ -10,6 +10,8 @@ from time import sleep
 class Connection(object):
   '''Connection class to hold settings'''
 
+  __slots__ = ['hostname', 'username', 'password', 'port', 'ssh_opts']
+
   def __init__(self, hostname, port=None, username=None, password=None,
                retries=3, **kwargs):
     '''
@@ -28,9 +30,25 @@ class Connection(object):
 class SSH_Client(object):
   '''SSH Client'''
 
+  __slots__ = ['connection', '_ssh_channel', 'MAX_SESS_TRIES', 'CMD_TIMEOUT',
+               'OPEN_SESS_TIMEOUT', 'SSH_EOL', 'MAX_BUFFER_LENGTH',
+               'MAX_BUFFER_CYCLE', 'DEFAULT_PORT', '_last_response', '_client']
+
   def __init__(self, connection, max_sess_tries=3, cmd_timeout=3,
                open_sess_timeout=5, ssh_eol='\n', max_buffer_length=9999,
                max_buffer_cycle=10, default_port=22):
+    '''
+    :max_sess_tries: Integer, number of times to try connecting to SSH host
+    :cmd_timeout: Integer, number of seconds to allow a command to run
+    :open_sess_timeout: Integer, number of seconds to allow SSH session to
+      start.  This occurs after the connection is made.
+    :ssh_eol: String, End of line character(s)
+    :max_buffer_length: Integer, number of characters to pull from buffer.
+      Default value is good to start with.  This works with max_buffer_cycle.
+    :max_buffer_cycle: number of times to try to get data before deciding it is
+      too large.  Each getting of data is of size max_buffer_length.
+    :default_port: Integer, port number to connect to on remote host.
+    '''
     self.connection = connection
     self._ssh_channel = None
     self.MAX_SESS_TRIES = max_sess_tries
@@ -131,9 +149,25 @@ class SSH_Client(object):
 class Telnet_Client(object):
   '''Telnet Client'''
 
+  __slots__ = ['connection', 'MAX_SESS_TRIES', 'CMD_TIMEOUT',
+               'OPEN_SESS_TIMEOUT', 'TELNET_EOL', 'MAX_BUFFER_LENGTH',
+               'MAX_BUFFER_CYCLE', 'DEFAULT_PORT', '_last_response', '_client']
+
   def __init__(self, connection, max_sess_tries=3, cmd_timeout=3,
                open_sess_timeout=5, telnet_eol='\n', max_buffer_length=9999,
                max_buffer_cycle=10, default_port=23):
+    '''
+    :max_sess_tries: Integer, number of times to try connecting to Telnet host
+    :cmd_timeout: Integer, number of seconds to allow a command to run
+    :open_sess_timeout: Integer, number of seconds to allow Telnet session to
+      start. This occurs after the connection is made.
+    :telnet_eol: String, End of line character(s)
+    :max_buffer_length: Integer, number of characters to pull from buffer.
+      Default value is good to start with.  This works with max_buffer_cycle.
+    :max_buffer_cycle: number of times to try to get data before deciding it is
+      too large.  Each getting of data is of size max_buffer_length.
+    :default_port: Integer, port number to connect to on remote host.
+    '''
     self.connection = connection
     self.MAX_SESS_TRIES = max_sess_tries
     self.CMD_TIMEOUT = cmd_timeout
@@ -202,7 +236,7 @@ class Telnet_Client(object):
     return self._last_response
 
 
-
+'''
 if __name__ == '__main__':
   ctelnet = False
   if ctelnet == True:
@@ -221,4 +255,4 @@ if __name__ == '__main__':
     client.send_command('term len 0')
     res = client.send_command('sh ver', 1)
     print 'result:\n%s\n\nstderr:\n%s\n\n' % (res[0], res[1])
-
+#'''

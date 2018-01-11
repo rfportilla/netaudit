@@ -112,6 +112,15 @@ class TestFileTests(unittest.TestCase):
     self.assertRaises(E.TestNotFoundError, test_file.find_test_by_name,
                       test_name)
 
+  def test_find_test_by_name_test_def_not_found_raises(self):
+    test_name = 'bin-test'
+    test_def = 'NotExist'
+    test_file = audit.TestFile()
+    test_file.from_string(C.SAMPLE_TEST_FILE)
+    test_file.config_version = test_def
+    self.assertRaises(E.TestItemNotFoundError, test_file.find_test_by_name,
+                      test_name)
+
 
 
 class TestCaseTests(unittest.TestCase):
